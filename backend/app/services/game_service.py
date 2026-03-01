@@ -1,6 +1,6 @@
 # Game Service
 
-This file contains the business logic and operations for the Game service with MongoDB.
+# This file contains the business logic and operations for the Game service with MongoDB.
 
 import pymongo
 

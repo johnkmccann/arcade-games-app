@@ -2,6 +2,7 @@ import pytest
 from fastapi.testclient import TestClient
 from app.main import app
 from app.api.routes import games as games_module
+from app.models.game import Game
 
 client = TestClient(app)
 
@@ -9,16 +10,16 @@ client = TestClient(app)
 def reset_games():
     """Reset games list before each test"""
     games_module.games = [
-        {'id': 1, 'title': 'Chess', 'genre': 'Strategy'},
-        {'id': 2, 'title': 'Tetris', 'genre': 'Puzzle'},
-        {'id': 3, 'title': 'Pac-Man', 'genre': 'Arcade'}
+        Game(id='chess', title='Chess', genre='Strategy'),
+        Game(id='tetris', title='Tetris', genre='Puzzle'),
+        Game(id='pac-man', title='Pac-Man', genre='Arcade')
     ]
     yield
     # Cleanup after test
     games_module.games = [
-        {'id': 1, 'title': 'Chess', 'genre': 'Strategy'},
-        {'id': 2, 'title': 'Tetris', 'genre': 'Puzzle'},
-        {'id': 3, 'title': 'Pac-Man', 'genre': 'Arcade'}
+        Game(id='chess', title='Chess', genre='Strategy'),
+        Game(id='tetris', title='Tetris', genre='Puzzle'),
+        Game(id='pac-man', title='Pac-Man', genre='Arcade')
     ]
 
 
@@ -32,30 +33,46 @@ def test_get_games():
 # Test the POST /games endpoint
 
 def test_create_game():
-    new_game = {'title': 'Test Game', 'genre': 'Arcade'}
+    new_game = {'id': 'test-game', 'title': 'Test Game', 'genre': 'Arcade'}
     response = client.post('/games', json=new_game)
     assert response.status_code == 201
+    assert response.json()['id'] == 'test-game'
     assert response.json()['title'] == 'Test Game'
     assert response.json()['genre'] == 'Arcade'
+
+# Test POST /games with duplicate ID (should fail)
+
+def test_create_game_duplicate_id():
+    new_game = {'id': 'chess', 'title': 'Chess Duplicate', 'genre': 'Strategy'}
+    response = client.post('/games', json=new_game)
+    assert response.status_code == 409
+    assert "already exists" in response.json()['detail']
 
 # Test the GET /games/{id} endpoint
 
 def test_get_game_by_id():
-    response = client.get('/games/1')  # Assuming a game with ID 1 exists
+    response = client.get('/games/chess')
     assert response.status_code == 200
-    assert response.json()['id'] == 1
+    assert response.json()['id'] == 'chess'
 
 # Test the DELETE /games/{id} endpoint
 
 def test_delete_game():
-    response = client.delete('/games/1')  # Assuming a game with ID 1 exists
+    response = client.delete('/games/chess')
     assert response.status_code == 204
 
 # Test updating a game
 
 def test_update_game():
-    updated_game = {'title': 'Updated Game', 'genre': 'Puzzle'}
-    response = client.put('/games/1', json=updated_game)  # Assuming a game with ID 1 exists
+    updated_game = {'id': 'chess', 'title': 'Updated Chess', 'genre': 'Strategy'}
+    response = client.put('/games/chess', json=updated_game)
     assert response.status_code == 200
-    assert response.json()['title'] == 'Updated Game'
-    assert response.json()['genre'] == 'Puzzle'
+    assert response.json()['title'] == 'Updated Chess'
+    assert response.json()['genre'] == 'Strategy'
+
+# Test getting a non-existent game
+
+def test_get_nonexistent_game():
+    response = client.get('/games/nonexistent')
+    assert response.status_code == 404
+    assert "not found" in response.json()['detail']
