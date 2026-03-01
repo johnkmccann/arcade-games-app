@@ -1,6 +1,8 @@
-from flask import Flask, jsonify, request
+from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
+from typing import List
 
-app = Flask(__name__)
+router = APIRouter(prefix="/games", tags=["games"])
 
 games = [
     {'id': 1, 'title': 'Chess', 'genre': 'Strategy'},
@@ -8,38 +10,40 @@ games = [
     {'id': 3, 'title': 'Pac-Man', 'genre': 'Arcade'}
 ]
 
-@app.route('/games', methods=['GET'])
-def get_games():
-    return jsonify(games)
+class Game(BaseModel):
+    title: str
+    genre: str
 
-@app.route('/games/<int:game_id>', methods=['GET'])
-def get_game(game_id):
+@router.get("", response_model=List[dict])
+async def get_games():
+    return games
+
+@router.get("/{game_id}")
+async def get_game(game_id: int):
     game = next((game for game in games if game['id'] == game_id), None)
-    if game:
-        return jsonify(game)
-    return jsonify({'error': 'Game not found'}), 404
+    if not game:
+        raise HTTPException(status_code=404, detail="Game not found")
+    return game
 
-@app.route('/games', methods=['POST'])
-def add_game():
-    new_game = request.get_json()
-    new_game['id'] = len(games) + 1
+@router.post("", status_code=201)
+async def add_game(game: Game):
+    new_game = game.model_dump()
+    new_game['id'] = max([g['id'] for g in games]) + 1 if games else 1
     games.append(new_game)
-    return jsonify(new_game), 201
+    return new_game
 
-@app.route('/games/<int:game_id>', methods=['PUT'])
-def update_game(game_id):
-    game = next((game for game in games if game['id'] == game_id), None)
-    if game:
-        updates = request.get_json()
-        game.update(updates)
-        return jsonify(game)
-    return jsonify({'error': 'Game not found'}), 404
+@router.put("/{game_id}")
+async def update_game(game_id: int, game: Game):
+    game_obj = next((g for g in games if g['id'] == game_id), None)
+    if not game_obj:
+        raise HTTPException(status_code=404, detail="Game not found")
+    game_obj.update(game.model_dump())
+    return game_obj
 
-@app.route('/games/<int:game_id>', methods=['DELETE'])
-def delete_game(game_id):
+@router.delete("/{game_id}", status_code=204)
+async def delete_game(game_id: int):
     global games
+    original_len = len(games)
     games = [game for game in games if game['id'] != game_id]
-    return jsonify({'result': 'Game deleted'}), 200
-
-if __name__ == '__main__':
-    app.run(debug=True)
+    if len(games) == original_len:
+        raise HTTPException(status_code=404, detail="Game not found")

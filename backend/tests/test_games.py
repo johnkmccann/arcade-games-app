@@ -1,8 +1,25 @@
 import pytest
 from fastapi.testclient import TestClient
-from app import main
+from app.main import app
+from app.api.routes import games as games_module
 
-client = TestClient(main.app)
+client = TestClient(app)
+
+@pytest.fixture(autouse=True)
+def reset_games():
+    """Reset games list before each test"""
+    games_module.games = [
+        {'id': 1, 'title': 'Chess', 'genre': 'Strategy'},
+        {'id': 2, 'title': 'Tetris', 'genre': 'Puzzle'},
+        {'id': 3, 'title': 'Pac-Man', 'genre': 'Arcade'}
+    ]
+    yield
+    # Cleanup after test
+    games_module.games = [
+        {'id': 1, 'title': 'Chess', 'genre': 'Strategy'},
+        {'id': 2, 'title': 'Tetris', 'genre': 'Puzzle'},
+        {'id': 3, 'title': 'Pac-Man', 'genre': 'Arcade'}
+    ]
 
 
 # Test the GET /games endpoint

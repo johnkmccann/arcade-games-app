@@ -1,8 +1,12 @@
 {"compilerOptions": {
-  "target": "es5",
-  "module": "commonjs",
+  "target": "es2020",
+  "useDefineForClassFields": true,
+  "lib": ["es2020", "dom", "dom.iterable"],
+  "module": "esnext",
+  "skipLibCheck": true,
+  "jsx": "react-jsx",
   "strict": true,
   "esModuleInterop": true,
-  "skipLibCheck": true,
-  "forceConsistentCasingInFileNames": true
+  "forceConsistentCasingInFileNames": true,
+  "resolveJsonModule": true
  }}

@@ -1,1 +1,34 @@
-{\n  \"name\": \"arcade-games-app\",\n  \"version\": \"1.0.0\",\n  \"private\": true,\n  \"scripts\": {\n    \"dev\": \"vite\",\n    \"build\": \"vite build\",\n    \"serve\": \"vite preview\"\n  },\n  \"dependencies\": {\n    \"react\": \"^18.0.0\",\n    \"react-dom\": \"^18.0.0\",\n    \"axios\": \"^0.21.1\"\n  },\n  \"devDependencies\": {\n    \"vite\": \"^2.5.0\",\n    \"@types/react\": \"^17.0.0\",\n    \"@types/react-dom\": \"^17.0.0\",\n    \"typescript\": \"^4.5.0\"\n  }\n}
+{
+    "name": "arcade-games-app",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "serve": "vite preview",
+        "lint": "eslint src/",
+        "test": "vitest"
+    },
+    "dependencies": {
+        "axios": "^1.13.6",
+        "react": "^18.0.0",
+        "react-dom": "^18.0.0",
+        "react-router-dom": "^7.13.1"
+    },
+    "devDependencies": {
+        "@testing-library/jest-dom": "^6.1.0",
+        "@testing-library/react": "^14.0.0",
+        "@types/react": "^18.0.0",
+        "@types/react-dom": "^18.0.0",
+        "@typescript-eslint/eslint-plugin": "^8.0.0",
+        "@typescript-eslint/parser": "^8.0.0",
+        "@vitejs/plugin-react": "^4.0.0",
+        "@vitest/ui": "^4.0.18",
+        "eslint": "^8.0.0",
+        "eslint-plugin-react": "^7.32.0",
+        "jsdom": "^23.0.0",
+        "typescript": "^5.0.0",
+        "vite": "^7.3.1",
+        "vitest": "^4.0.18"
+    }
+}
