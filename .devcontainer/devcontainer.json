@@ -1,0 +1,45 @@
+{
+  "name": "Arcade Games App Dev",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+  "forwardPorts": [5173, 5001, 27017],
+  "portsAttributes": {
+    "5173": {
+      "label": "Frontend (Vite)"
+    },
+    "5001": {
+      "label": "Backend API"
+    },
+    "27017": {
+      "label": "MongoDB"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-python.vscode-pylance",
+        "ms-python.mypy-type-checker",
+        "ms-python.autopep8",
+        "dbaeumer.vscode-eslint",
+        "esbenp.prettier-vscode",
+        "mongodb.mongodb-vscode",
+        "vitest.explorer",
+        "eamodio.gitlens",
+        "mhutchie.git-graph",
+        "ms-vscode.vscode-typescript-next"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/workspace/backend/venv/bin/python",
+        "python.linting.enabled": true,
+        "[python]": {
+          "editor.formatOnSave": true
+        }
+      }
+    }
+  },
+  "postStartCommand": "echo '✓ Dev environment ready! Frontend and backend dependencies installed. You can now run the dev servers!'",
+  "remoteUser": "vscode"
+}

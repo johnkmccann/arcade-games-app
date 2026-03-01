@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspace:cached
+      - /workspace/node_modules
+      - /workspace/backend/venv
+    ports:
+      - "5173:5173"
+      - "5001:5001"
+      - "27017:27017"
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/arcade_games
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - mongo
+    command: /bin/sh -c "while sleep 1000; do :; done"
+
+  mongo:
+    image: mongo:7
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+volumes:
+  mongo_data:
