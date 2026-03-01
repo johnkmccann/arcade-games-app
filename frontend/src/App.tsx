@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 const App = () => {
   return (
@@ -9,13 +9,11 @@ const App = () => {
           <h1>Arcade Games App</h1>
         </header>
         <main>
-          <Switch>
+          <Routes>
             {/* Define your routes here */}
-            <Route path="/" exact>
-              <h2>Home Page</h2>
-            </Route>
+            <Route path="/" element={<h2>Home Page</h2>} />
             {/* Additional routes can be added here */}
-          </Switch>
+          </Routes>
         </main>
         <footer>
           <p>&copy; 2026 Arcade Games. All rights reserved.</p>

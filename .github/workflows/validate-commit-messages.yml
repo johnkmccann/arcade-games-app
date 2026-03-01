@@ -1,0 +1,32 @@
+name: Validate Commit Messages
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Validate commit messages
+        run: |
+          # Get commit subjects in the PR range
+          commits=$(git log origin/main..HEAD --format=%s)
+          # Allow normal ticket-based commits and special auto-generated commits (e.g., merge/revert)
+          pattern="^(GH-[0-9]+ |Merge .+|Revert .+)"
+          
+          while IFS= read -r line; do
+            if [[ ! "$line" =~ $pattern ]]; then
+              echo "❌ Commit message validation failed"
+              echo "Expected pattern: $pattern"
+              echo "Failing commit message: '$line'"
+              exit 1
+            fi
+          done <<< "$commits"
+          
+          echo "✅ All commits follow the naming pattern"
