@@ -1,0 +1,1 @@
+from pydantic import BaseModel\n\nclass Score(BaseModel):\n    player_name: str\n    points: int\n    timestamp: str \n\n    class Config:\n        orm_mode = True
