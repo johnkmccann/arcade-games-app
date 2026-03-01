@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:14 AS build
+FROM node:20 AS build
 
 # Set the working directory
 WORKDIR /app
@@ -13,17 +13,22 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the React application
+# Build the production assets
 RUN npm run build
 
-# Start with a lightweight web server for serving the build
-FROM nginx:alpine
+# Production stage - serve static files
+FROM node:20-slim
 
-# Copy build files from the previous stage
-COPY --from=build /app/build /usr/share/nginx/html
+WORKDIR /app
 
-# Expose port 80
-EXPOSE 80
+# Install a lightweight static file server (pinned version for reproducibility)
+RUN npm install -g serve@14.2.0
 
-# Command to run the web server
-CMD ["nginx", "-g", "daemon off;"]
+# Copy built assets from build stage
+COPY --from=build /app/dist ./dist
+
+# Expose port 3000
+EXPOSE 3000
+
+# Command to serve the static files
+CMD ["serve", "-s", "dist", "-l", "3000"]

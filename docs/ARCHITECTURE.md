@@ -17,7 +17,7 @@ This document outlines the architecture of the Arcade Games App, detailing the o
 
 3. **Database**
    - Stores user data, game scores, and other relevant information.
-   - Utilizes a relational database for structured data storage.
+   - Uses MongoDB for flexible document-based data storage.
 
 4. **API Layer**
    - Facilitates communication between the front-end and back-end.

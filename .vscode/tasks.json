@@ -1,0 +1,37 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Ensure Docker is Running (Local)",
+      "detail": "Checks if Docker Desktop is running on your Mac and starts it if necessary",
+      "type": "shell",
+      "command": "bash",
+      "args": ["${workspaceFolder}/scripts/ensure-docker-local.sh"],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": [],
+      "windows": {
+        "command": "echo",
+        "args": ["Docker Desktop should be running. Please start it from the Start Menu if it isn't already."]
+      }
+    },
+    {
+      "label": "Dev Containers: Rebuild Container",
+      "detail": "Rebuilds the dev container after requirements.txt or package.json changes",
+      "type": "shell",
+      "command": "echo '📦 To rebuild the dev container, use:' && echo '   Command Palette (Cmd/Ctrl+Shift+P) → Dev Containers: Rebuild Container'",
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
+
