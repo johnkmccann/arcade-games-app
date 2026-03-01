@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import GameList from './components/GameList';
+import { DartsSetup, DartsGame, DartsResults } from './games/darts';
 
 const App = () => {
   return (
@@ -10,8 +12,15 @@ const App = () => {
         </header>
         <main>
           <Routes>
-            {/* Define your routes here */}
-            <Route path="/" element={<h2>Home Page</h2>} />
+            {/* Game Discovery */}
+            <Route path="/" element={<GameList />} />
+            <Route path="/games" element={<GameList />} />
+
+            {/* Darts Routes */}
+            <Route path="/games/darts/start" element={<DartsSetup />} />
+            <Route path="/games/darts/play/:sessionId" element={<DartsGame />} />
+            <Route path="/games/darts/results/:sessionId" element={<DartsResults />} />
+
             {/* Additional routes can be added here */}
           </Routes>
         </main>
