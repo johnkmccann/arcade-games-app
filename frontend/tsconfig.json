@@ -3,6 +3,7 @@
   "useDefineForClassFields": true,
   "lib": ["es2020", "dom", "dom.iterable"],
   "module": "esnext",
+  "moduleResolution": "bundler",
   "skipLibCheck": true,
   "jsx": "react-jsx",
   "strict": true,

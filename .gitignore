@@ -27,11 +27,11 @@ build/
 
 # Docker
 *.image
-Dockerfile
 
 # IDE Files
 .idea/
-.vscode/
+.vscode/settings.json
+.vscode/keybindings.json
 *.sublime-workspace
 *.sublime-project
 
